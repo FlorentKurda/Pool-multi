@@ -59,4 +59,18 @@ describe("RoomManager", () => {
 
     expect(created.room.rematch("player-a")).toEqual(expect.objectContaining({ code: "REMATCH_NOT_AVAILABLE" }));
   });
+
+  it("démarre automatiquement la partie au deuxième joueur", () => {
+    const manager = new RoomManager();
+    const created = manager.createRoom("socket-a", "player-a", { playerName: "Alice" });
+    if (!("room" in created)) throw new Error("room creation failed");
+
+    expect(created.room.status).toBe("waiting");
+    manager.joinRoom("socket-b", { roomId: created.room.id, playerId: "player-b", playerName: "Bob" });
+
+    expect(created.room.status).toBe("playing");
+    expect(created.room.currentPlayerId).toBe("player-a");
+    expect(created.room.roomState().players).toHaveLength(2);
+    expect(created.room.gameState().status).toBe("playing");
+  });
 });

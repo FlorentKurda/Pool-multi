@@ -7,6 +7,7 @@
     "dev": "pnpm --filter @pool/game-core build && concurrently \"pnpm --filter @pool/web dev\" \"pnpm --filter @pool/server dev\"",
     "build": "pnpm -r build",
     "build:server": "pnpm --filter @pool/game-core build && pnpm --filter @pool/server build",
+    "build:web": "pnpm --filter @pool/web build",
     "start:server": "pnpm --filter @pool/server start",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",

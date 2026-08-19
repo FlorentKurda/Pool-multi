@@ -20,45 +20,62 @@ function channel(roomId: string): string {
 function sendRoomState(roomId: string): void {
   const room = rooms.allRooms().find((candidate) => candidate.id === roomId);
   if (!room) return;
-  io.to(channel(room.id)).emit("room:state", room.roomState());
-  io.to(channel(room.id)).emit("game:state", room.gameState());
+  const roomState = room.roomState();
+  const gameState = room.gameState();
+  console.info(`[room:${room.id}] emitting room:state players=${roomState.players.map((player) => `${player.name}:${player.id}:${player.connected ? "connected" : "disconnected"}`).join(",")} count=${roomState.players.length} status=${roomState.status} currentPlayerId=${roomState.currentPlayerId ?? "none"}`);
+  io.to(channel(room.id)).emit("room:state", roomState);
+  console.info(`[room:${room.id}] emitting game:state status=${gameState.status} players=${gameState.players.length} currentPlayerId=${gameState.currentPlayerId ?? "none"}`);
+  io.to(channel(room.id)).emit("game:state", gameState);
   io.to(channel(room.id)).emit("game:snapshot", { roomId: room.id, balls: room.physics.snapshot(), moving: room.physics.isMoving(), events: [] });
 }
 
 notifyRoomChanged = sendRoomState;
 
 function sendError(socket: Parameters<Parameters<typeof io.on>[1]>[0], error: RoomError): void {
+  console.warn(`[socket] error socket.id=${socket.id} code=${error.code} message=${error.message}`);
   socket.emit("game:error", error);
 }
 
 io.on("connection", (socket) => {
-  socket.on("room:create", (payload) => {
+  console.info(`[socket] connected socket.id=${socket.id}`);
+
+  socket.on("room:create", async (payload) => {
+    console.info(`[room:create] socket.id=${socket.id} playerId=${payload.playerId}`);
     const result = rooms.createRoom(socket.id, payload.playerId, payload);
     if ("error" in result) {
       sendError(socket, result.error);
       return;
     }
-    socket.join(channel(result.room.id));
+    await Promise.resolve(socket.join(channel(result.room.id)));
+    console.info(`[room:${result.room.id}] created roomId=${result.room.id} playerId=${payload.playerId} players=${result.room.playerList.length}`);
     sendRoomState(result.room.id);
   });
 
-  socket.on("room:join", (payload) => {
+  socket.on("room:join", async (payload) => {
+    console.info(`[room:join] socket.id=${socket.id} roomId=${payload.roomId} playerId=${payload.playerId}`);
     const result = rooms.joinRoom(socket.id, payload);
     if ("error" in result) {
       sendError(socket, result.error);
       return;
     }
-    socket.join(channel(result.room.id));
+    await Promise.resolve(socket.join(channel(result.room.id)));
+    const players = result.room.playerList.map((player) => `${player.name}:${player.id}`).join(",");
+    console.info(`[room:${result.room.id}] after join players=[${players}] count=${result.room.playerList.length}`);
+    if (result.room.status === "playing" && result.room.playerList.length === 2) {
+      console.info(`[room:${result.room.id}] transition waiting -> playing currentPlayerId=${result.room.currentPlayerId}`);
+    }
     sendRoomState(result.room.id);
   });
 
-  socket.on("room:reconnect", (payload) => {
+  socket.on("room:reconnect", async (payload) => {
+    console.info(`[room:reconnect] socket.id=${socket.id} roomId=${payload.roomId} playerId=${payload.playerId}`);
     const result = rooms.reconnect(socket.id, payload.roomId, payload.playerId);
     if ("error" in result) {
       sendError(socket, result.error);
       return;
     }
-    socket.join(channel(result.room.id));
+    await Promise.resolve(socket.join(channel(result.room.id)));
+    console.info(`[room:${result.room.id}] after reconnect players=${result.room.playerList.length}`);
     sendRoomState(result.room.id);
   });
 
@@ -97,6 +114,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    console.info(`[socket] disconnected socket.id=${socket.id}`);
     const room = rooms.disconnectSocket(socket.id);
     if (room) sendRoomState(room.id);
   });
