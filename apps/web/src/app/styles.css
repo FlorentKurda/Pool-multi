@@ -1,0 +1,49 @@
+:root { --ink: #18231f; --muted: #708079; --paper: #f5f2eb; --accent: #ed7650; }
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body { background: var(--paper); color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
+.page-shell { max-width: 1280px; margin: 0 auto; padding: 7vw 5vw 5vw; }
+.hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 42px; }
+.eyebrow { color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: .16em; margin: 0 0 18px; }
+h1 { font-family: Georgia, serif; font-size: clamp(42px, 7vw, 86px); font-weight: 400; letter-spacing: -.055em; line-height: .95; margin: 0; }
+h1 span { color: var(--accent); }
+.intro { color: var(--muted); font-size: 16px; line-height: 1.5; max-width: 250px; margin: 0 0 5px; }
+.table-card { background: #d3b17b; border-radius: 16px; box-shadow: 0 22px 45px rgba(36, 47, 40, .15); overflow: hidden; padding: 16px; }
+.lobby-shell { max-width: 1100px; }
+.lobby-card, .invite-card { background: #fffdf8; border: 1px solid rgba(24,35,31,.1); border-radius: 16px; box-shadow: 0 18px 35px rgba(36,47,40,.08); max-width: 480px; padding: 28px; }
+.lobby-card label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+.lobby-card input { background: #f5f2eb; border: 1px solid rgba(24,35,31,.16); border-radius: 8px; color: var(--ink); font: inherit; padding: 13px 14px; width: 100%; }
+.lobby-card button, .invite-card button { background: var(--ink); border: 0; border-radius: 8px; color: #fffdf8; cursor: pointer; font: inherit; font-weight: 700; margin-top: 14px; padding: 13px 16px; width: 100%; }
+.lobby-card button:disabled { cursor: not-allowed; opacity: .42; }
+.join-divider { color: var(--muted); font-size: 12px; margin: 25px 0 12px; text-align: center; }
+.join-row { display: flex; gap: 8px; }
+.join-row input { text-transform: uppercase; }
+.secondary-button { margin-top: 0 !important; width: auto !important; white-space: nowrap; }
+.game-shell { max-width: 1280px; }
+.game-header, .players-bar { align-items: center; display: flex; justify-content: space-between; gap: 18px; }
+.game-header { margin-bottom: 22px; }
+.game-header h2 { font-family: Georgia, serif; font-size: clamp(28px, 4vw, 46px); font-weight: 400; margin: 0; }
+.players-bar { background: #fffdf8; border-radius: 12px; margin-bottom: 18px; padding: 12px 16px; }
+.player-chip { display: flex; flex-direction: column; gap: 4px; min-width: 135px; }
+.player-chip span { color: var(--muted); font-size: 12px; }
+.player-chip small { color: var(--muted); font-size: 11px; }
+.active-player strong { color: var(--accent); }
+.turn-message { color: var(--muted); font-size: 13px; text-align: center; }
+.winner-banner { background: var(--accent); border-radius: 10px; color: #fffdf8; font-size: 20px; font-weight: 700; margin: 0 0 16px; padding: 14px; text-align: center; }
+.winner-banner span { display: block; font-size: 13px; font-weight: 400; margin-top: 5px; opacity: .85; }
+.winner-banner button { background: #fffdf8; border: 0; border-radius: 7px; color: var(--ink); cursor: pointer; font: inherit; font-size: 13px; font-weight: 700; margin-top: 12px; padding: 9px 14px; }
+.winner-banner.defeat { background: #334943; }
+.invite-card { margin-top: 18px; max-width: none; }
+.invite-card p { margin-top: 0; }
+.invite-card code { background: #f5f2eb; border-radius: 6px; display: block; overflow: hidden; padding: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.invite-card button { max-width: 220px; }
+.error-message { background: #ffe8df; border-radius: 8px; color: #9b3f29; margin: 0 0 16px; padding: 12px 14px; }
+.table-stage { position: relative; }
+.pool-canvas { display: block; width: 100%; height: auto; border-radius: 9px; }
+.pool-canvas { cursor: crosshair; touch-action: none; }
+.table-hud { display: flex; justify-content: space-between; gap: 12px; color: rgba(248,245,237,.88); font-size: 12px; left: 22px; right: 22px; bottom: 20px; position: absolute; pointer-events: none; }
+.connection { background: rgba(16,21,26,.7); border-radius: 999px; padding: 7px 10px; }
+.connection.connected::before { background: #77c496; border-radius: 50%; content: ""; display: inline-block; height: 6px; margin: 0 6px 1px 0; width: 6px; }
+.status-note { color: var(--muted); font-size: 13px; margin: 18px 2px 0; }
+.status-dot { background: var(--accent); border-radius: 50%; display: inline-block; height: 7px; margin-right: 7px; width: 7px; }
+@media (max-width: 680px) { .page-shell { padding-top: 48px; } .hero { display: block; margin-bottom: 28px; } .intro { margin-top: 22px; max-width: 330px; } .table-card { padding: 8px; } .players-bar { align-items: stretch; flex-direction: column; } .turn-message { order: -1; } .player-chip { flex-direction: row; justify-content: space-between; } .join-row { flex-direction: column; } .secondary-button { width: 100% !important; } }

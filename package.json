@@ -1,0 +1,16 @@
+{
+  "name": "pool-multiplayer",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @pool/web dev\" \"pnpm --filter @pool/server dev\"",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
