@@ -29,6 +29,15 @@ pnpm dev
 - Frontend : http://localhost:3000
 - Serveur Socket.IO : http://localhost:3001
 
+Pour Railway (service backend depuis la racine du monorepo) :
+
+```text
+Build Command: pnpm build:server
+Start Command: pnpm start:server
+```
+
+Variables backend : `PORT` est injectée automatiquement par Railway ; définir `FRONTEND_URL` avec l'URL publique du frontend. Le serveur n'utilise pas d'autre variable d'environnement.
+
 Parcours disponible :
 
 1. Ouvrir `/`.

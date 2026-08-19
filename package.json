@@ -4,8 +4,10 @@
   "version": "0.1.0",
   "packageManager": "pnpm@9.15.4",
   "scripts": {
-    "dev": "concurrently \"pnpm --filter @pool/web dev\" \"pnpm --filter @pool/server dev\"",
+    "dev": "pnpm --filter @pool/game-core build && concurrently \"pnpm --filter @pool/web dev\" \"pnpm --filter @pool/server dev\"",
     "build": "pnpm -r build",
+    "build:server": "pnpm --filter @pool/game-core build && pnpm --filter @pool/server build",
+    "start:server": "pnpm --filter @pool/server start",
     "typecheck": "pnpm -r typecheck",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test"

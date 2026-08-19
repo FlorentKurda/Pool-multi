@@ -5,9 +5,10 @@ import { FIXED_DELTA_MS } from "./physics.js";
 import { RoomManager, type RoomError } from "./room-manager.js";
 
 const port = Number(process.env.PORT ?? 3001);
+const frontendUrl = process.env.FRONTEND_URL ?? "http://localhost:3000";
 const httpServer = createServer();
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
-  cors: { origin: "http://localhost:3000" },
+  cors: { origin: frontendUrl },
 });
 let notifyRoomChanged: (roomId: string) => void = () => undefined;
 const rooms = new RoomManager((roomId) => notifyRoomChanged(roomId));
@@ -109,6 +110,6 @@ setInterval(() => {
   }
 }, FIXED_DELTA_MS);
 
-httpServer.listen(port, () => {
-  console.log(`Pool server listening on http://localhost:${port}`);
+httpServer.listen(port, "0.0.0.0", () => {
+  console.log(`Pool server listening on 0.0.0.0:${port}`);
 });
